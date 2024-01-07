@@ -1,61 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
-import * as Location from 'expo-location'
 import Tabs from './src/components/Tabs'
-import { WEATHER_API_KEY } from '@env'
+import { useGetWeather } from './src/hooks/useGetWeather'
+import ErrorItem from './src/components/ErrorItem'
 
 const App = () => {
-  const [loading, setLoading] = useState(true)
-  const [lat, setLat] = useState(null)
-  const [lon, setLon] = useState(null)
-  const [error, setError] = useState(null)
-  const [weather, setWeather] = useState([])
+  const [loading, error, weather] = useGetWeather()
 
-  const fetchWeatherData = async () => {
-    try {
-      const res = await fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`
-      )
-      const data = await res.json()
-      setWeather(data)
-    } catch (e) {
-      setError('Could not fetch weather')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    ;(async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync()
-      if (status !== 'granted') {
-        setError('Permission to access location was denied')
-      }
-
-      let tempLocation = await Location.getCurrentPositionAsync({})
-      setLat(tempLocation.coords.latitude)
-      setLon(tempLocation.coords.longitude)
-      await fetchWeatherData()
-    })()
-  }, [lat, lon])
-
-  if (weather) {
-    console.log(weather)
-  }
-
-  if (loading) {
+  if (weather && weather.list) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="blue" />
-      </View>
+      <NavigationContainer>
+        <Tabs weather={weather} />
+      </NavigationContainer>
     )
   }
 
   return (
-    <NavigationContainer>
-      <Tabs />
-    </NavigationContainer>
+    <View style={styles.container}>
+      {error ? <ErrorItem /> : <ActivityIndicator size="large" color="blue" />}
+    </View>
   )
 }
 
