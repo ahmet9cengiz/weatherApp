@@ -9,8 +9,12 @@ import {
 } from 'react-native'
 import moment from 'moment'
 import IconText from '../components/IconText'
+import { useRecoilValue } from 'recoil'
+import { weatherState } from '../state/atoms/weatherState'
 
-const City = ({ weatherData }) => {
+const City = () => {
+  const weatherData = useRecoilValue(weatherState).city
+
   const {
     container,
     imageLayout,

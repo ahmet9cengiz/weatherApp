@@ -7,8 +7,12 @@ import {
   ImageBackground
 } from 'react-native'
 import ListItem from '../components/ListItem'
+import { useRecoilValue } from 'recoil'
+import { weatherState } from '../state/atoms/weatherState'
 
-const UpcomingWeather = ({ weatherData }) => {
+const UpcomingWeather = () => {
+  const weatherData = useRecoilValue(weatherState).list
+
   const renderItem = ({ item }) => (
     <ListItem
       condition={item.weather[0].main}

@@ -14,7 +14,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['react'],
+  plugins: ['react', 'react-hooks'],
   rules: {
     semi: ['error', 'never'],
     'comma-dangle': [2, 'never'],
@@ -22,6 +22,13 @@ module.exports = {
     'no-use-before-define': [
       'error',
       { functions: true, classes: true, variables: false }
+    ],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': [
+      'warn',
+      {
+        additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)'
+      }
     ]
   }
 }

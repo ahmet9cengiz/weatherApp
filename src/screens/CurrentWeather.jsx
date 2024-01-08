@@ -3,6 +3,8 @@ import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import RowText from '../components/RowText'
 import { weatherType } from '../utilities/weatherType'
+import { useRecoilValue } from 'recoil'
+import { weatherState } from '../state/atoms/weatherState'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const CurrentWeather = ({ weatherData }) => {
+const CurrentWeather = () => {
   const {
     wrapper,
     container,
@@ -54,6 +56,8 @@ const CurrentWeather = ({ weatherData }) => {
     description,
     message
   } = styles
+
+  const weatherData = useRecoilValue(weatherState).list[0]
 
   const {
     main: { temp, feels_like, temp_max, temp_min },
